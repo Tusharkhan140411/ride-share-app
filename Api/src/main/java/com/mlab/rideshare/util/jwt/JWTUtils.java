@@ -1,17 +1,16 @@
-package com.mlab.rideshare.util;
+package com.mlab.rideshare.util.jwt;
 
 import com.mlab.rideshare.helper.ApplicationContextHolder;
 import com.mlab.rideshare.props.ApplicationProperties;
+import com.mlab.rideshare.util.DateTimeUtils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.security.core.GrantedAuthority;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
 @UtilityClass
@@ -23,8 +22,9 @@ public class JWTUtils {
     }
 
     /* PUBLIC METHODS */
-    public static String generateToken(String username){
+    public static String generateToken(String username, Collection<? extends GrantedAuthority> authorities){
         Map<String, Object> claims = new HashMap<>();
+        claims.put("authorities",authorities);
         return createToken(claims, username);
     }
 
@@ -80,7 +80,7 @@ public class JWTUtils {
         return claimsResolver.apply(extractAllClaims(token));
     }
 
-    private static Claims extractAllClaims(String token) {
+    public static Claims extractAllClaims(String token) {
         return Jwts.parser()
                 .setSigningKey(prop.getJwtSecret())
                 .parseClaimsJws(trimToken(token))

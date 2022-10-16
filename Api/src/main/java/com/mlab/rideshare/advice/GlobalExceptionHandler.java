@@ -3,7 +3,7 @@ package com.mlab.rideshare.advice;
 import com.mlab.rideshare.exception.AuthException;
 import com.mlab.rideshare.exception.BadRequestException;
 import com.mlab.rideshare.exception.RecordNotFoundException;
-import com.mlab.rideshare.util.ResponseBuilder;
+import com.mlab.rideshare.util.response.ResponseBuilder;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
