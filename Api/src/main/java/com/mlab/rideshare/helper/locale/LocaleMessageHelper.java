@@ -1,4 +1,4 @@
-package com.mlab.rideshare.helper;
+package com.mlab.rideshare.helper.locale;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;

@@ -27,6 +27,9 @@ spring:
         show_sql: false
         format_sql: true
         enable_lazy_load_no_trans: true
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
 
 application:
   token-expiry-minute: 30
