@@ -1,0 +1,21 @@
+version: '3.9'
+services:
+    environment:
+      MYSQL_USER: root
+        ride-share-mysql-service:
+          restart: always
+          image: woahbase/alpine-mysql:latest
+          container_name: mlab_mysql_db_container
+      MYSQL_USER_PWD: root
+      MYSQL_USER_DB: ride_share_db
+    ports:
+      - 0.0.0.0:3306:3306
+    networks:
+      - ride-share-network
+    volumes:
+      - db-data:/var/lib/mysql
+volumes:
+   db-data:
+networks:
+  ride-share-network:
+    driver: bridge
