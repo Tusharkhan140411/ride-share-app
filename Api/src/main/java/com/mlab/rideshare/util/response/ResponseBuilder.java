@@ -1,6 +1,6 @@
-package com.mlab.rideshare.util;
+package com.mlab.rideshare.util.response;
 
-import com.mlab.rideshare.model.ApiResponse;
+import com.mlab.rideshare.model.response.ApiResponse;
 import lombok.experimental.UtilityClass;
 import org.springframework.http.HttpStatus;
 
