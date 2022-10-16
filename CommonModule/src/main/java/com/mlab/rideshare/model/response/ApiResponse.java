@@ -1,4 +1,4 @@
-package com.mlab.rideshare.model;
+package com.mlab.rideshare.model.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
