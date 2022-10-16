@@ -33,7 +33,12 @@ public class UserEntity extends BaseEntity {
     @Column(name = "mobile")
     private String mobile;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
     private RoleEntity role;
+
+    public void setRole(RoleEntity role){
+        this.role = role;
+        this.role.getUsers().add(this);
+    }
 }
