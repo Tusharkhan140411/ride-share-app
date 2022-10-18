@@ -23,18 +23,21 @@ public class DriverCurrentInfoEntity extends BaseEntity {
     private long driverId;
 
     @Column(name = "current_latitude", nullable = false)
-    private String currentLatitude;
+    private double currentLatitude;
 
     @Column(name = "current_longitude", nullable = false)
-    private String currentLongitude;
+    private double currentLongitude;
 
     @Column(name = "old_latitude")
-    private String oldLatitude;
+    private double oldLatitude;
 
     @Column(name = "old_longitude")
-    private String oldLongitude;
+    private double oldLongitude;
 
     @Column(name = "active_status")
-    private int activeStatus;
+    private boolean activeStatus;
+
+    @OneToOne(mappedBy = "driverCurrentInfo")
+    private DriverAdditionalInfoEntity driverAdditionalInfo;
 
 }

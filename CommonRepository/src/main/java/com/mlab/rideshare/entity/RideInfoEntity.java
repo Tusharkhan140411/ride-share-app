@@ -26,16 +26,16 @@ public class RideInfoEntity extends BaseEntity {
     private long driverId;
 
     @Column(name = "source_latitude", nullable = false)
-    private String sourceLatitude;
+    private double sourceLatitude;
 
     @Column(name = "source_longitude", nullable = false)
-    private String sourceLongitude;
+    private double sourceLongitude;
 
     @Column(name = "destination_latitude", nullable = false)
-    private String destinationLatitude;
+    private double destinationLatitude;
 
     @Column(name = "destination_longitude", nullable = false)
-    private String destinationLongitude;
+    private double destinationLongitude;
 
     @Column(name = "fare")
     private double fare;
