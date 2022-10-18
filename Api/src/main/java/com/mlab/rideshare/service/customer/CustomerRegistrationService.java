@@ -11,10 +11,7 @@ import com.mlab.rideshare.service.RoleEntityService;
 import com.mlab.rideshare.service.UserEntityService;
 import com.mlab.rideshare.service.base.BaseService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor

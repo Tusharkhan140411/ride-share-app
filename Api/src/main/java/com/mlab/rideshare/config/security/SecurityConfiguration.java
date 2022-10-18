@@ -52,7 +52,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private String[] getAllowedUrls(){
         return new String[]{
                 "/access/token",
-                "/customers/registration"
+                "/customers/registration",
+                "/drivers/registration"
         };
     }
 

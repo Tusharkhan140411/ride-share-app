@@ -19,8 +19,4 @@ public abstract class BaseService {
     protected String getLocaleMessage(String messageKey){
         return messageHelper.getLocalMessage(messageKey);
     }
-
-    protected CurrentUser getCurrentUser() {
-        return (CurrentUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    }
 }

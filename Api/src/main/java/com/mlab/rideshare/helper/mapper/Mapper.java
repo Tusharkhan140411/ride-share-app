@@ -1,11 +1,11 @@
 package com.mlab.rideshare.helper.mapper;
 
 
-import com.mlab.rideshare.entity.RoleEntity;
-import com.mlab.rideshare.entity.UserEntity;
+import com.mlab.rideshare.entity.*;
 import com.mlab.rideshare.enums.UserRoleEnum;
 import com.mlab.rideshare.model.auth.CurrentUser;
-import com.mlab.rideshare.model.request.customer.CustomerCreateRequest;
+import com.mlab.rideshare.model.request.UserCreateRequest;
+import com.mlab.rideshare.model.request.driver.DriverRegistrationRequest;
 import com.mlab.rideshare.service.base.BaseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -39,7 +39,7 @@ public class Mapper extends BaseService {
 
     }
 
-    public UserEntity mapToUserEntity(CustomerCreateRequest customerCreateRequest, RoleEntity roleEntity) {
+    public UserEntity mapToUserEntity(UserCreateRequest customerCreateRequest, RoleEntity roleEntity) {
        UserEntity userEntity =  UserEntity.builder()
                .username(customerCreateRequest.getUsername())
                .password(passwordEncoder.encode(customerCreateRequest.getPassword()))
@@ -53,5 +53,17 @@ public class Mapper extends BaseService {
        return userEntity;
     }
 
+    public DriverAdditionalInfoEntity mapToDriverAdditionalInfoEntity(DriverRegistrationRequest driverRegistrationRequest, long userId,
+                                                                      VehicleInfoEntity vehicleInfoEntity, DriverCurrentInfoEntity driverCurrentInfoEntity){
+        DriverAdditionalInfoEntity driverAdditionalInfoEntity = DriverAdditionalInfoEntity.builder()
+                .userId(userId)
+                .vehicleLicenceInfo(driverRegistrationRequest.getVehicleLicenceInfo())
+                .vehicleRegPlateNo(driverRegistrationRequest.getVehicleRegPlateNo())
+                .driverCurrentInfo(driverCurrentInfoEntity)
+                .build();
+        driverAdditionalInfoEntity.setVehicleInfo(vehicleInfoEntity);
+
+        return driverAdditionalInfoEntity;
+    }
 
 }
