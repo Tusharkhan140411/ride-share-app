@@ -82,6 +82,11 @@
             <artifactId>jaxb-api</artifactId>
         </dependency>
         <!--        JWS End-->
+
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

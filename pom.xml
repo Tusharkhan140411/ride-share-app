@@ -31,6 +31,7 @@
 		<jjwt.version>0.9.1</jjwt.version>
 		<jaxb-api.version>2.3.0</jaxb-api.version>
 		<commons-collection.version>4.4</commons-collection.version>
+		<openapi.version>1.6.6</openapi.version>
 
 		<tests.skip>true</tests.skip>
 	</properties>
@@ -79,6 +80,12 @@
 				<version>${jaxb-api.version}</version>
 			</dependency>
 			<!--			JWT-->
+
+			<dependency>
+				<groupId>org.springdoc</groupId>
+				<artifactId>springdoc-openapi-ui</artifactId>
+				<version>${openapi.version}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 

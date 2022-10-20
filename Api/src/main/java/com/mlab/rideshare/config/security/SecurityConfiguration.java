@@ -53,7 +53,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return new String[]{
                 "/access/token",
                 "/customers/registration",
-                "/drivers/registration"
+                "/drivers/registration",
+                "/swagger-ui/**",
+                "/v3/api-docs/**"
         };
     }
 
