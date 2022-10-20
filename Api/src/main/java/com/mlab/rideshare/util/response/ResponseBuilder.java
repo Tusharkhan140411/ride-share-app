@@ -29,10 +29,6 @@ public class ResponseBuilder {
         return buildResponse(null, status, message);
     }
 
-    public <T> ApiResponse<T> buildOkResponse(T item, String message){
-        return buildResponse(item, HttpStatus.OK, message);
-    }
-
     public <T> ApiResponse<T> buildOkResponse(T item){
         return buildResponse(item, HttpStatus.OK);
     }

@@ -16,7 +16,7 @@ public class FairCalculationService extends BaseService {
                 .distance(sourceLatitude,sourceLongitude,destinationLatitude,destinationLongitude) * farePerKm;
 
         if (calculatedFare <= 0){
-            throw new BadRequestException(messageHelper.getLocalMessage("validation.constraints.invalid.location.input.message"));
+            throw new BadRequestException(messageHelper.getLocalMessage("invalid.location.input.message"));
         }
 
         return calculatedFare;

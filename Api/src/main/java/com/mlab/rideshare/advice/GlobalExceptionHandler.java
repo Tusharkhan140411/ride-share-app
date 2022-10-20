@@ -3,6 +3,7 @@ package com.mlab.rideshare.advice;
 import com.mlab.rideshare.exception.AuthException;
 import com.mlab.rideshare.exception.BadRequestException;
 import com.mlab.rideshare.exception.RecordNotFoundException;
+import com.mlab.rideshare.helper.locale.LocaleMessageHelper;
 import com.mlab.rideshare.util.response.ResponseBuilder;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,8 @@ import org.springframework.web.context.request.WebRequest;
 @RestControllerAdvice
 @RequiredArgsConstructor
 public class GlobalExceptionHandler {
+
+    private final LocaleMessageHelper messageHelper;
 
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<?> badRequestExceptionHandler(BadRequestException ex, WebRequest request) {
@@ -41,20 +44,19 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<?> handleAccessDeniedException(AccessDeniedException ex, WebRequest request) {
         this.logException(ex);
-        String message = "Forbidden! You are not allowed to access this resource";
-        return this.buildResponseEntity(HttpStatus.UNAUTHORIZED, message);
+        return this.buildResponseEntity(HttpStatus.UNAUTHORIZED, messageHelper.getLocalMessage("forbidden.message"));
     }
 
     @ExceptionHandler(ExpiredJwtException.class)
     public ResponseEntity<?> jwtTokenExpiredExceptionHandler(ExpiredJwtException ex, WebRequest request) {
         this.logException(ex);
-        return this.buildResponseEntity(HttpStatus.UNAUTHORIZED, "Token Expired");
+        return this.buildResponseEntity(HttpStatus.UNAUTHORIZED, messageHelper.getLocalMessage("token.expired.message"));
     }
 
     @ExceptionHandler(HibernateException.class)
     public ResponseEntity<?> handleHibernateException(HibernateException ex, WebRequest request) {
         this.logException(ex);
-        return this.buildResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, "DB Exception occurred! Sorry for the inconvenience");
+        return this.buildResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, messageHelper.getLocalMessage("db.exception.message"));
     }
 
     @ExceptionHandler(Exception.class)

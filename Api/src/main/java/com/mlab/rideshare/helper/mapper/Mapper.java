@@ -4,8 +4,12 @@ package com.mlab.rideshare.helper.mapper;
 import com.mlab.rideshare.entity.*;
 import com.mlab.rideshare.enums.UserRoleEnum;
 import com.mlab.rideshare.model.auth.CurrentUser;
-import com.mlab.rideshare.model.request.UserCreateRequest;
+import com.mlab.rideshare.model.dto.DriverDto;
+import com.mlab.rideshare.model.dto.VehicleDto;
+import com.mlab.rideshare.model.request.user.BaseUserRegRequest;
+import com.mlab.rideshare.model.request.driver.DriverCurrentInfoSyncRequest;
 import com.mlab.rideshare.model.request.driver.DriverRegistrationRequest;
+import com.mlab.rideshare.model.response.ride.RideNotificationResponse;
 import com.mlab.rideshare.service.base.BaseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -39,7 +43,7 @@ public class Mapper extends BaseService {
 
     }
 
-    public UserEntity mapToUserEntity(UserCreateRequest customerCreateRequest, RoleEntity roleEntity) {
+    public UserEntity mapToUserEntity(BaseUserRegRequest customerCreateRequest, RoleEntity roleEntity) {
        UserEntity userEntity =  UserEntity.builder()
                .username(customerCreateRequest.getUsername())
                .password(passwordEncoder.encode(customerCreateRequest.getPassword()))
@@ -57,13 +61,63 @@ public class Mapper extends BaseService {
                                                                       VehicleInfoEntity vehicleInfoEntity, DriverCurrentInfoEntity driverCurrentInfoEntity){
         DriverAdditionalInfoEntity driverAdditionalInfoEntity = DriverAdditionalInfoEntity.builder()
                 .userId(userId)
-                .vehicleLicenceInfo(driverRegistrationRequest.getVehicleLicenceInfo())
-                .vehicleRegPlateNo(driverRegistrationRequest.getVehicleRegPlateNo())
                 .driverCurrentInfo(driverCurrentInfoEntity)
                 .build();
         driverAdditionalInfoEntity.setVehicleInfo(vehicleInfoEntity);
 
         return driverAdditionalInfoEntity;
+    }
+
+    public List<DriverDto> mapToDriverDto(List<DriverCurrentInfoEntity> eligibleDrivers, List<UserEntity> drivers){
+        return eligibleDrivers.stream()
+                .map(e-> DriverDto.builder()
+                        .name(drivers.stream().filter(d->d.getId() == e.getDriverAdditionalInfo().getUserId()).findFirst().get().getFullName())
+                        .mobileNo(drivers.stream().filter(d->d.getId() == e.getDriverAdditionalInfo().getUserId()).findFirst().get().getMobile())
+                        .id(drivers.stream().filter(d->d.getId() == e.getDriverAdditionalInfo().getUserId()).findFirst().get().getId())
+                        .vehicleDto(
+                                VehicleDto.builder()
+                                        .vehicleType(e.getDriverAdditionalInfo().getVehicleInfo().getVehicleType())
+                                        .vehicleTypeName(e.getDriverAdditionalInfo().getVehicleInfo().getVehicleName())
+                                        .build()
+                        ).build()
+                        ).collect(Collectors.toList());
+    }
+
+    public void fillUpdatedRideInfoValues(RideInfoEntity entity, long driverId, int status){
+        entity.setDriverId(driverId);
+        entity.setStatus(status);
+    }
+
+    public void fillUpdatedRideInfoValues(RideInfoEntity entity, int status, String dateString){
+        entity.setStatus(status);
+        entity.setRideStartTime(dateString);
+    }
+
+    public void fillUpdatedRideInfoValues(RideInfoEntity entity, int status, String dateString, int paymentStatus){
+        entity.setStatus(status);
+        entity.setRideEndTime(dateString);
+        entity.setPaymentStatus(paymentStatus);
+    }
+
+    public void fillUpdatedDriverCurrInfoValues(DriverCurrentInfoEntity entity,DriverCurrentInfoSyncRequest request){
+        entity.setOldLatitude(entity.getCurrentLatitude());
+        entity.setOldLongitude(entity.getCurrentLongitude());
+        entity.setCurrentLatitude(request.getCurrentLatitude());
+        entity.setCurrentLongitude(request.getCurrentLongitude());
+        entity.setActiveStatus(request.isActive());
+    }
+
+    public List<RideNotificationResponse> mapToRideNotificationResponse(List<RideInfoEntity> entities){
+        return entities.stream().map(
+                e-> RideNotificationResponse.builder()
+                        .fare(e.getFare())
+                        .trackingId(e.getTrackingId())
+                        .sourceLatitude(e.getSourceLatitude())
+                        .sourceLongitude(e.getSourceLongitude())
+                        .destinationLatitude(e.getDestinationLatitude())
+                        .destinationLongitude(e.getDestinationLongitude())
+                .build()
+        ).collect(Collectors.toList());
     }
 
 }

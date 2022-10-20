@@ -10,4 +10,5 @@ import java.util.Optional;
 public interface DriverCurrentInfoRepository extends JpaRepository<DriverCurrentInfoEntity, Long> {
 
     List<DriverCurrentInfoEntity> findByActiveStatusTrue();
+    Optional<DriverCurrentInfoEntity> findByDriverId(long userId);
 }

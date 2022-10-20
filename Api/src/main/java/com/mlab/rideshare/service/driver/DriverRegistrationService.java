@@ -13,6 +13,7 @@ import com.mlab.rideshare.service.VehicleInfoEntityService;
 import com.mlab.rideshare.service.base.BaseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -24,11 +25,12 @@ public class DriverRegistrationService extends BaseService {
     private final VehicleInfoEntityService vehicleInfoEntityService;
     private final Mapper mapper;
 
+    @Transactional
     public void registerDriver(DriverRegistrationRequest driverRegistrationRequest){
         userEntityService.findUserByUsername(driverRegistrationRequest.getUsername())
                 .ifPresent(u -> {
                     throw new NotUniqueException(
-                            messageHelper.getLocalMessage("validation.constraints.username.exists.message"));
+                            messageHelper.getLocalMessage("user.exists.message"));
                 });
 
         RoleEntity roleEntity = roleEntityService
@@ -36,7 +38,7 @@ public class DriverRegistrationService extends BaseService {
                 .orElseThrow(
                         () ->
                                 new RecordNotFoundException(
-                                        messageHelper.getLocalMessage("validation.constraints.roles.not.exists.message"))
+                                        messageHelper.getLocalMessage("roles.not.exists.message"))
                 );
 
         VehicleInfoEntity vehicleInfoEntity = vehicleInfoEntityService
@@ -44,7 +46,7 @@ public class DriverRegistrationService extends BaseService {
                 .orElseThrow(
                         () ->
                                 new RecordNotFoundException(
-                                        messageHelper.getLocalMessage("validation.constraints.vehicle.not.exists.message"))
+                                        messageHelper.getLocalMessage("vehicle.type.not.exists.message"))
                 );
 
         UserEntity user = mapper.mapToUserEntity(driverRegistrationRequest, roleEntity);

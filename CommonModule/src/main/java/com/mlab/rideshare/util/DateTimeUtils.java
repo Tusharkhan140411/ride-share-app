@@ -6,6 +6,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
@@ -13,52 +14,33 @@ import java.util.Date;
 @UtilityClass
 public class DateTimeUtils {
 
-    public static final String DB_DATE_FORMAT = "yyyy-MM-dd";
-    public static final String API_DATE_FORMAT = "dd-MM-yyyy";
+    public static final DateFormat apiDateFormatter = new SimpleDateFormat("MM-DD-YYYY HH:mm:ss");
+    public static final DateFormat dbDateFormatter = new SimpleDateFormat("YYYY-MM-DD HH:mm:ss");
 
 
-    public static String toDBDateFormat(String apiDateStr){
-        return convertDateFormat(apiDateStr, API_DATE_FORMAT, DB_DATE_FORMAT);
+    /*private LocalDateTime convertToLocalDateTimeViaInstant(Date dateToConvert) {
+        return dateToConvert.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
     }
 
-    public static String toAPIDateFormat(String dbDateStr){
-        return convertDateFormat(dbDateStr, DB_DATE_FORMAT, API_DATE_FORMAT);
+    public LocalDate convertToLocalDateViaInstant(Date dateToConvert) {
+        return dateToConvert.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
     }
 
-    private static String convertDateFormat(String source, String sourceFormat, String targetFormat){
-        LocalDate sourceDate = LocalDate.parse(source, DateTimeFormatter.ofPattern(sourceFormat));
-        return sourceDate.format(DateTimeFormatter.ofPattern(targetFormat));
+    public String getResponseDateFormat(Date dateToConvert){
+        LocalDate ld = convertToLocalDateViaInstant(dateToConvert);
+        return DateTimeFormatter.ofPattern(API_DATE_FORMAT).format(ld);
+    }*/
+
+    public static String formatDateToDBFormat(Date date) {
+        return date == null ? "" : dbDateFormatter.format(date);
     }
 
-    private static String convertDateTimeFormat(String source, String sourceFormat, String targetFormat){
-        LocalDateTime sourceDatTime = LocalDateTime.parse(source, DateTimeFormatter.ofPattern(sourceFormat));
-        return sourceDatTime.format(DateTimeFormatter.ofPattern(targetFormat));
-    }
-
-    public static String formatDate(Date date, String format) {
-        DateFormat dateFormatter = new SimpleDateFormat(format);
-        return date == null ? "" : dateFormatter.format(date);
-    }
-
-    public static String toAPIDateFormat(Date dbDate){
-        String dbDateString = formatDate(dbDate, DB_DATE_FORMAT);
-        return toAPIDateFormat(dbDateString);
-    }
-
-    public static String toAPIDateTimeFormat(Date dbDate){
-        String dbDateString = formatDate(dbDate, DB_DATE_FORMAT);
-        return convertDateTimeFormat(dbDateString, DB_DATE_FORMAT, API_DATE_FORMAT);
-    }
-
-    public static Date addHour(Date date, int hour) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        calendar.add(Calendar.HOUR, hour);
-        return calendar.getTime();
-    }
-
-    public static Date expireAtHour(int hour){
-        return addHour(new Date(), hour);
+    public static String formatDateToApiFormat(Date date) {
+        return date == null ? "" : apiDateFormatter.format(date);
     }
 
     public static int convertToMilli(int unitValue, int calenderFlag) {

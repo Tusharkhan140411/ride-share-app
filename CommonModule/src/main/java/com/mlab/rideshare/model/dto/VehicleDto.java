@@ -15,9 +15,9 @@ public class VehicleDto {
     @JsonProperty("vehicle_type_name")
     private String vehicleTypeName;
 
-    @JsonProperty("vehicle_reg_plate_no")
+    /*@JsonProperty("vehicle_reg_plate_no")
     private String vehicleRegPlateNo;
 
     @JsonProperty("vehicle_licence_info")
-    private String vehicleLicenceInfo;
+    private String vehicleLicenceInfo;*/
 }

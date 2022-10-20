@@ -1,22 +1,19 @@
 package com.mlab.rideshare.model.request.driver;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.mlab.rideshare.model.request.UserCreateRequest;
+import com.mlab.rideshare.model.request.user.BaseUserRegRequest;
 import lombok.Data;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-
 @Data
-public class DriverRegistrationRequest extends UserCreateRequest {
+public class DriverRegistrationRequest extends BaseUserRegRequest {
 
-    @NotBlank(message = "validation.constraints.vehicle.reg.plate.NotNull.message")
+    /*@NotBlank(message = "validation.constraints.vehicle.reg.plate.NotNull.message")
     @JsonProperty("vehicle_reg_plate_no")
     private String vehicleRegPlateNo;
 
     @NotBlank(message = "validation.constraints.vehicle.licence.info.NotNull.message")
     @JsonProperty("vehicle_licence_info")
-    private String vehicleLicenceInfo;
+    private String vehicleLicenceInfo;*/
 
     @JsonProperty("vehicle_type")
     private int vehicleType;

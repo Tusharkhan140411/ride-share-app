@@ -16,12 +16,11 @@ import java.util.function.Function;
 @UtilityClass
 public class JWTUtils {
 
-    private final static ApplicationProperties prop;
+    private final static ApplicationProperties properties;
     static {
-        prop = ApplicationContextHolder.getContext().getBean(ApplicationProperties.class);
+        properties = ApplicationContextHolder.getContext().getBean(ApplicationProperties.class);
     }
 
-    /* PUBLIC METHODS */
     public static String generateToken(String username, Collection<? extends GrantedAuthority> authorities){
         Map<String, Object> claims = new HashMap<>();
         claims.put("authorities",authorities);
@@ -37,8 +36,8 @@ public class JWTUtils {
     }
 
     public static String trimToken(String bearerToken){
-        if(StringUtils.startsWith(bearerToken, prop.getTokenPrefix())){
-            return StringUtils.replace(bearerToken, prop.getTokenPrefix(), "").trim();
+        if(StringUtils.startsWith(bearerToken, properties.getTokenPrefix())){
+            return StringUtils.replace(bearerToken, properties.getTokenPrefix(), "").trim();
         }
         return bearerToken;
     }
@@ -58,22 +57,21 @@ public class JWTUtils {
 
     public static boolean isTokenFormatValid(String bearerToken){
         return StringUtils.isNotBlank(bearerToken) &&
-                bearerToken.matches(prop.getTokenValidationRegex());
+                bearerToken.matches(properties.getTokenValidationRegex());
     }
 
-    /* PRIVATES */
     private static String createToken(Map<String, Object> claims, String subject){
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + getExpiryMilli()))
-                .signWith(SignatureAlgorithm.HS256, prop.getJwtSecret())
+                .signWith(SignatureAlgorithm.HS256, properties.getJwtSecret())
                 .compact();
     }
 
     private static int getExpiryMilli(){
-        return DateTimeUtils.convertToMilli(prop.getTokenExpiryMinute(), Calendar.MINUTE);
+        return DateTimeUtils.convertToMilli(properties.getTokenExpiryMinute(), Calendar.MINUTE);
     }
 
     private static <T> T extractClaim(String token, Function<Claims, T> claimsResolver){
@@ -82,7 +80,7 @@ public class JWTUtils {
 
     public static Claims extractAllClaims(String token) {
         return Jwts.parser()
-                .setSigningKey(prop.getJwtSecret())
+                .setSigningKey(properties.getJwtSecret())
                 .parseClaimsJws(trimToken(token))
                 .getBody();
     }

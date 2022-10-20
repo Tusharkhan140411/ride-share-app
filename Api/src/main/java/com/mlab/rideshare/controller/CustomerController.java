@@ -1,6 +1,6 @@
 package com.mlab.rideshare.controller;
 
-import com.mlab.rideshare.model.request.customer.CustomerCreateRequest;
+import com.mlab.rideshare.model.request.customer.CustomerRegistrationRequest;
 import com.mlab.rideshare.model.response.ApiResponse;
 import com.mlab.rideshare.service.customer.CustomerRegistrationService;
 import com.mlab.rideshare.util.response.ResponseBuilder;
@@ -20,7 +20,7 @@ public class CustomerController extends BaseController {
     private final CustomerRegistrationService customerRegistrationService;
 
     @PostMapping("/customers/registration")
-    public ResponseEntity<ApiResponse> createUser(@RequestBody @Valid CustomerCreateRequest request,
+    public ResponseEntity<ApiResponse> createUser(@RequestBody @Valid CustomerRegistrationRequest request,
                                                   BindingResult bindingResult){
         super.throwIfHasError(bindingResult);
         customerRegistrationService.registerCustomer(request);

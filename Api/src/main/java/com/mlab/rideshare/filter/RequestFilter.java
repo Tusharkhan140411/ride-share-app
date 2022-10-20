@@ -1,5 +1,6 @@
 package com.mlab.rideshare.filter;
 
+import com.mlab.rideshare.helper.locale.LocaleMessageHelper;
 import com.mlab.rideshare.props.ApplicationProperties;
 import com.mlab.rideshare.service.auth.AuthService;
 import com.mlab.rideshare.util.jwt.JWTUtils;
@@ -13,8 +14,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -32,17 +31,16 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class RequestFilter extends OncePerRequestFilter {
-    @Autowired
-    @Lazy
-    private AuthService authService;
 
-    private final ApplicationProperties props;
+
+    private final LocaleMessageHelper messageHelper;
+    private final ApplicationProperties properties;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-        String authToken = request.getHeader(props.getAuthHeaderName());
+        String authToken = request.getHeader(properties.getAuthHeaderName());
         if (!JWTUtils.isTokenFormatValid(authToken) || JWTUtils.isTokenInvalidOrExpired(authToken)) {
             filterChain.doFilter(request, response);
             return;
@@ -64,11 +62,9 @@ public class RequestFilter extends OncePerRequestFilter {
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            log.info("{} Triggered for URI {}", this.getClass().getName(), request.getRequestURI());
-
             filterChain.doFilter(request, response);
         } catch (JwtException ex) {
-            throw new IllegalStateException("Token is not valid");
+            throw new IllegalStateException(messageHelper.getLocalMessage("invalid.token.message"));
         }
     }
 }

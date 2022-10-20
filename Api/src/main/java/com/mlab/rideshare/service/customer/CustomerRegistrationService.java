@@ -6,12 +6,13 @@ import com.mlab.rideshare.enums.UserRoleEnum;
 import com.mlab.rideshare.exception.NotUniqueException;
 import com.mlab.rideshare.exception.RecordNotFoundException;
 import com.mlab.rideshare.helper.mapper.Mapper;
-import com.mlab.rideshare.model.request.customer.CustomerCreateRequest;
+import com.mlab.rideshare.model.request.customer.CustomerRegistrationRequest;
 import com.mlab.rideshare.service.RoleEntityService;
 import com.mlab.rideshare.service.UserEntityService;
 import com.mlab.rideshare.service.base.BaseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -21,11 +22,12 @@ public class CustomerRegistrationService extends BaseService {
     private final RoleEntityService roleEntityService;
     private final Mapper mapper;
 
-    public void registerCustomer(CustomerCreateRequest customerCreateRequest){
-        userEntityService.findUserByUsername(customerCreateRequest.getUsername())
+    @Transactional
+    public void registerCustomer(CustomerRegistrationRequest customerRegistrationRequest){
+        userEntityService.findUserByUsername(customerRegistrationRequest.getUsername())
                 .ifPresent(u -> {
                     throw new NotUniqueException(
-                            messageHelper.getLocalMessage("validation.constraints.username.exists.message"));
+                            messageHelper.getLocalMessage("user.exists.message"));
                 });
 
         RoleEntity roleEntity = roleEntityService
@@ -33,10 +35,10 @@ public class CustomerRegistrationService extends BaseService {
                 .orElseThrow(
                         () ->
                                 new RecordNotFoundException(
-                                        messageHelper.getLocalMessage("validation.constraints.roles.not.exists.message"))
+                                        messageHelper.getLocalMessage("roles.not.exists.message"))
                 );
 
-        UserEntity user = mapper.mapToUserEntity(customerCreateRequest, roleEntity);
+        UserEntity user = mapper.mapToUserEntity(customerRegistrationRequest, roleEntity);
         userEntityService.save(user);
     }
 

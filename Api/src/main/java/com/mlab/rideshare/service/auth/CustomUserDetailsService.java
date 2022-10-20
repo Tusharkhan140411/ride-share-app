@@ -23,7 +23,7 @@ public class CustomUserDetailsService extends BaseService implements UserDetails
         UserEntity user = userEntityService
                 .findUserByUsername(username)
                 .orElseThrow(()-> new RecordNotFoundException(
-                        super.getLocaleMessage("validation.constraints.username.NotFound.message")));
+                        messageHelper.getLocalMessage("user.not.exists.message")));
 
         return Mapper.mapToUserDetails(user);
 

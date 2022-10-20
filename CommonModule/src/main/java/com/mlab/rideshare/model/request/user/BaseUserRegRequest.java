@@ -1,4 +1,4 @@
-package com.mlab.rideshare.model.request;
+package com.mlab.rideshare.model.request.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -13,18 +13,18 @@ import javax.validation.constraints.NotBlank;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserCreateRequest {
+public class BaseUserRegRequest {
     @NotBlank(message = "validation.constraints.username.NotNull.message")
     @JsonProperty("user_name")
     private String username;
-    @NotBlank(message = "validation.constraints.user.email.empty.message")
+    @NotBlank(message = "validation.constraints.password.NotNull.message")
     private String password;
     @NotBlank(message = "validation.constraints.user.fullName.NotNull.message")
     @JsonProperty("full_name")
     private String fullName;
     @Email(message = "validation.constraints.user.email.Invalid.message")
     private String email;
-    @NotBlank(message = "validation.constraints.user.mobile.no.Invalid.message")
+    @NotBlank(message = "validation.constraints.user.mobileNo.NotNull.message")
     @JsonProperty("mobile_no")
     private String mobileNo;
 }
