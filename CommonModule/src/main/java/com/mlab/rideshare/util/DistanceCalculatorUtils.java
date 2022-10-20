@@ -19,8 +19,7 @@ public class DistanceCalculatorUtils {
                     * Math.cos(Math.toRadians(theta));
             dist = Math.toDegrees(Math.acos(dist));
             dist = dist * 60 * 1.1515 * 1.609344;
-//            return dist;
-            return 2; //need to change
+            return dist;
         }
     }
 }

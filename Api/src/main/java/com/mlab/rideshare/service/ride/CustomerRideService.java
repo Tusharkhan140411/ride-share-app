@@ -63,13 +63,7 @@ public class CustomerRideService extends BaseService {
     @Transactional
     public RideInitiateResponse initiateRideRequest(RideInitiateRequest request){
 
-        UserEntity userEntity = userEntityService
-                .findUserByUsername(request.getUsername())
-                .orElseThrow(
-                        () ->
-                new RecordNotFoundException(
-                        messageHelper.getLocalMessage("user.not.exists.message"))
-                );
+        UserEntity userEntity = getUserByUserName(request.getUsername());
 
         List<RideInfoEntity> rideInfoEntities = rideInfoEntityService
                 .findByCustomerIdAndStatus(userEntity.getId(), RideStatusEnum.INITIATED.getId());
@@ -77,16 +71,8 @@ public class CustomerRideService extends BaseService {
         if (!CollectionUtils.isEmpty(rideInfoEntities))
             throw new NotUniqueException(messageHelper.getLocalMessage("active.ride.already.exist.message"));
 
-        List<UserEntity> userEntities = userEntityService.findAll(); //improvement
-
-        if(CollectionUtils.isEmpty(userEntities))
-            throw new RecordNotFoundException(messageHelper.getLocalMessage("users.not.found.message"));
-
-        List<UserEntity> driverEntities = userEntities.stream()
-                .filter(
-                        u -> u.getRole().getName().equals(UserRoleEnum.DRIVER.getName())
-                ).collect(Collectors.toList()
-                );
+        List<UserEntity> driverEntities = userEntityService
+                .getByRoleName(UserRoleEnum.DRIVER.getName());
 
         if(CollectionUtils.isEmpty(driverEntities))
             throw new RecordNotFoundException(messageHelper.getLocalMessage("driver.not.found.message"));
@@ -132,7 +118,7 @@ public class CustomerRideService extends BaseService {
 
         return RideInitiateResponse.builder()
                 .trackingNo(rideInfoEntity.getTrackingId())
-                .initiatedAt(DateTimeUtils.formatDateToApiFormat(rideInfoEntity.getCreatedAt())) //need to fix
+                .initiatedAt(DateTimeUtils.formatDateToApiFormat(rideInfoEntity.getCreatedAt()))
                 .status(RideStatusEnum.getStatusById(rideInfoEntity.getStatus()))
                 .drivers(eligibleDriverDtos)
                 .build();
@@ -140,13 +126,7 @@ public class CustomerRideService extends BaseService {
 
     @Transactional
     public RideCancelResponse cancelRide(RideCancelRequest request){
-        UserEntity userEntity = userEntityService
-                .findUserByUsername(request.getUsername())
-                .orElseThrow(
-                        () ->
-                                new RecordNotFoundException(
-                                        messageHelper.getLocalMessage("user.not.exists.message"))
-                );
+        UserEntity userEntity = getUserByUserName(request.getUsername());
 
         RideInfoEntity rideInfoEntity = rideInfoEntityService
                 .findByCustomerIdAndTrackingId(userEntity.getId(), request.getTrackingNo())
@@ -174,20 +154,14 @@ public class CustomerRideService extends BaseService {
 
         return RideCancelResponse.builder()
                 .status(RideStatusEnum.getStatusById(rideInfoEntity.getStatus()))
-                .initiatedAt(DateTimeUtils.formatDateToApiFormat(rideInfoEntity.getCreatedAt())) //need to fix date
+                .initiatedAt(DateTimeUtils.formatDateToApiFormat(rideInfoEntity.getCreatedAt()))
                 .trackingNo(rideInfoEntity.getTrackingId())
-                .cancelledAt(DateTimeUtils.formatDateToApiFormat(new Date())) //need to fix date
+                .cancelledAt(DateTimeUtils.formatDateToApiFormat(new Date()))
                 .build();
     }
 
     public RideStatusResponse getRideStatus(RideStatusRequest request){
-        UserEntity userEntity = userEntityService
-                .findUserByUsername(request.getUsername())
-                .orElseThrow(
-                        () ->
-                                new RecordNotFoundException(
-                                        messageHelper.getLocalMessage("user.not.exists.message"))
-                );
+        UserEntity userEntity = getUserByUserName(request.getUsername());
 
         RideInfoEntity rideInfoEntity = rideInfoEntityService
                 .findByCustomerIdAndTrackingId(userEntity.getId(), request.getTrackingNo())
@@ -212,7 +186,7 @@ public class CustomerRideService extends BaseService {
         return RideStatusResponse.builder()
                 .status(RideStatusEnum.getStatusById(rideInfoEntity.getStatus()))
                 .fare(rideInfoEntity.getFare())
-                .initiatedAt(DateTimeUtils.formatDateToApiFormat(rideInfoEntity.getCreatedAt())) //need to fix
+                .initiatedAt(DateTimeUtils.formatDateToApiFormat(rideInfoEntity.getCreatedAt()))
                 .driverInfoDto(driverInfoDto)
                 .build();
     }
@@ -230,6 +204,14 @@ public class CustomerRideService extends BaseService {
 
         if (rideInfoEntity.getStatus() != RideStatusEnum.COMPLETED.getId())
             throw new RecordNotFoundException(messageHelper.getLocalMessage("ride.not.completed.message"));
+
+        rideReviewEntityService
+                .getByRideId(rideInfoEntity.getId())
+                .ifPresent(
+                        r -> {
+                           throw new NotUniqueException(messageHelper.getLocalMessage("review.already.exist.message"));
+                        }
+                );
 
         RideReviewEntity rideReviewEntity = RideReviewEntity.builder()
                 .rideId(rideInfoEntity.getId())

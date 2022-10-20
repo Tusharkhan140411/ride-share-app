@@ -53,7 +53,6 @@ public class DriverRegistrationService extends BaseService {
         userEntityService.save(user);
 
         DriverCurrentInfoEntity driverCurrentInfoEntity = DriverCurrentInfoEntity.builder()
-                .driverId(user.getId())
                 .currentLatitude(driverRegistrationRequest.getCurrentLatitude())
                 .currentLongitude(driverRegistrationRequest.getCurrentLongitude())
                 .oldLatitude(driverRegistrationRequest.getCurrentLatitude())
@@ -61,7 +60,7 @@ public class DriverRegistrationService extends BaseService {
                 .activeStatus(Boolean.TRUE)
                 .build();
 
-        DriverAdditionalInfoEntity driverAdditionalInfoEntity = mapper.mapToDriverAdditionalInfoEntity(driverRegistrationRequest,
+        DriverAdditionalInfoEntity driverAdditionalInfoEntity = mapper.mapToDriverAdditionalInfoEntity(
                 user.getId(),vehicleInfoEntity,driverCurrentInfoEntity);
 
         driverAdditionalInfoEntityService.save(driverAdditionalInfoEntity);

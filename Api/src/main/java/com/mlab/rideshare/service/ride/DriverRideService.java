@@ -104,9 +104,7 @@ public class DriverRideService extends BaseService {
 
         rideInfoEntityService.save(rideInfoEntity);
 
-        //need to exclude driver from nearest driver list & update nearest driver list
-
-        rideNotificationService.enableNotification(rideNotificationEntity);
+        rideNotificationService.enableNotification(rideNotificationEntity,rideInfoEntity.getDriverId());
 
     }
 
@@ -128,7 +126,7 @@ public class DriverRideService extends BaseService {
         }
 
         mapper.fillUpdatedRideInfoValues(rideInfoEntity,RideStatusEnum.IN_PROGRESS.getId(),
-                DateTimeUtils.formatDateToDBFormat(new Date())); //need to fix date
+                DateTimeUtils.formatDateToDBFormat(new Date()));
 
         rideInfoEntityService.save(rideInfoEntity);
 
@@ -152,7 +150,7 @@ public class DriverRideService extends BaseService {
         }
 
         mapper.fillUpdatedRideInfoValues(rideInfoEntity,RideStatusEnum.COMPLETED.getId(),
-                DateTimeUtils.formatDateToDBFormat(new Date()), PaymentStatusEnum.COMPLETE.getId()); //need to fix date
+                DateTimeUtils.formatDateToDBFormat(new Date()), PaymentStatusEnum.COMPLETE.getId());
 
         rideInfoEntityService.save(rideInfoEntity);
 

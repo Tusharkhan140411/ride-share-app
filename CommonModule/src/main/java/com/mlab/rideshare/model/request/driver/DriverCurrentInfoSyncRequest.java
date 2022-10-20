@@ -12,7 +12,7 @@ public class DriverCurrentInfoSyncRequest {
     @JsonProperty("user_name")
     private String username;
 
-    @JsonProperty("is_active")
+    @JsonProperty("active_status")
     private boolean isActive;
 
     @JsonProperty("current_latitude")

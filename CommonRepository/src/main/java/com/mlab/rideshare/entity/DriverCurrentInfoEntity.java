@@ -19,9 +19,6 @@ public class DriverCurrentInfoEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "driver_id") //improvement
-    private long driverId;
-
     @Column(name = "current_latitude", nullable = false)
     private double currentLatitude;
 

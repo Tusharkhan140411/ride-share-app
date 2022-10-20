@@ -14,26 +14,9 @@ import java.util.Date;
 @UtilityClass
 public class DateTimeUtils {
 
-    public static final DateFormat apiDateFormatter = new SimpleDateFormat("MM-DD-YYYY HH:mm:ss");
-    public static final DateFormat dbDateFormatter = new SimpleDateFormat("YYYY-MM-DD HH:mm:ss");
+    public static final DateFormat apiDateFormatter = new SimpleDateFormat("MM-dd-YYYY HH:mm:ss");
+    public static final DateFormat dbDateFormatter = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
 
-
-    /*private LocalDateTime convertToLocalDateTimeViaInstant(Date dateToConvert) {
-        return dateToConvert.toInstant()
-                .atZone(ZoneId.systemDefault())
-                .toLocalDateTime();
-    }
-
-    public LocalDate convertToLocalDateViaInstant(Date dateToConvert) {
-        return dateToConvert.toInstant()
-                .atZone(ZoneId.systemDefault())
-                .toLocalDate();
-    }
-
-    public String getResponseDateFormat(Date dateToConvert){
-        LocalDate ld = convertToLocalDateViaInstant(dateToConvert);
-        return DateTimeFormatter.ofPattern(API_DATE_FORMAT).format(ld);
-    }*/
 
     public static String formatDateToDBFormat(Date date) {
         return date == null ? "" : dbDateFormatter.format(date);

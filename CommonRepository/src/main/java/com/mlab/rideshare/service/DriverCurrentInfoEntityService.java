@@ -22,6 +22,6 @@ public class DriverCurrentInfoEntityService extends BaseCRUDService<DriverCurren
     }
 
     public Optional<DriverCurrentInfoEntity> getDriverByUserId(long userId){
-        return repository.findByDriverId(userId);
+        return repository.findByDriverAdditionalInfoUserId(userId);
     }
 }
