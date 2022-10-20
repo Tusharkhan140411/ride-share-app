@@ -14,9 +14,9 @@ import java.util.List;
 public class RideInitiateResponse {
     @JsonProperty("tracking_no")
     private String trackingNo;
-    private int status;
+    private String status;
     @JsonProperty("initiated_at")
     private String initiatedAt;
-    @JsonProperty("driver_info_list")
+    @JsonProperty("nearest_drivers")
     private List<DriverDto> drivers;
 }

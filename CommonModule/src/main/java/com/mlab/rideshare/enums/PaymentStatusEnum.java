@@ -8,18 +8,15 @@ import java.util.stream.Collectors;
 
 @Getter
 @AllArgsConstructor
-public enum RideStatusEnum {
-    INITIATED(1,"Initiated"),
-    ACCEPTED(2,"Accepted"),
-    IN_PROGRESS(3,"In Progress"),
-    CANCELLED(4,"Cancelled"),
-    COMPLETED(5,"Completed");
+public enum PaymentStatusEnum {
+    INCOMPLETE(0,"Incomplete"),
+    COMPLETE(1,"Complete");
 
     private int id;
     private String value;
 
     public static String getStatusById(int id){
-        return Arrays.stream(RideStatusEnum.values())
+        return Arrays.stream(PaymentStatusEnum.values())
                 .filter(v->v.getId() == id)
                 .map(f->String.valueOf(f.getValue()))
                 .collect(Collectors.joining());

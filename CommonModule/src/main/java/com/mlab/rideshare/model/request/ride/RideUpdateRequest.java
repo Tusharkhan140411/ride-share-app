@@ -12,11 +12,12 @@ import javax.validation.constraints.NotBlank;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RideInitiateRequest extends RideSearchRequest {
+public class RideUpdateRequest {
     @NotBlank(message = "validation.constraints.username.NotNull.message")
     @JsonProperty("user_name")
     private String username;
 
-    @JsonProperty("vehicle_type")
-    private int vehicleType;
+    @NotBlank(message = "validation.constraints.tracking.no.NotNull.message")
+    @JsonProperty("tracking_no")
+    private String trackingNo;
 }

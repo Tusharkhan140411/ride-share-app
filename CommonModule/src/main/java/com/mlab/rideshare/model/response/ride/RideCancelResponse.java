@@ -1,17 +1,13 @@
 package com.mlab.rideshare.model.response.ride;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import javax.validation.constraints.NotBlank;
+import lombok.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class RideCancelResponse {
 
     private String status;
@@ -20,5 +16,5 @@ public class RideCancelResponse {
     @JsonProperty("initiated_at")
     private String initiatedAt;
     @JsonProperty("cancelled_at")
-    private String cancelledId;
+    private String cancelledAt;
 }

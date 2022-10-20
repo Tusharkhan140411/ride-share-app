@@ -13,7 +13,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Getter
 @Setter
-@Builder(toBuilder = true)
+@Builder
 public class RideInfoEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,8 +50,8 @@ public class RideInfoEntity extends BaseEntity {
     private int paymentStatus;
 
     @Column(name = "ride_start_time")
-    private Date rideStartTime;
+    private String rideStartTime;
 
     @Column(name = "ride_end_time")
-    private Date rideEndTime;
+    private String rideEndTime;
 }
