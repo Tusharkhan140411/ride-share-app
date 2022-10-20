@@ -8,9 +8,9 @@ import javax.validation.constraints.NotBlank;
 @Data
 public class DriverCurrentInfoSyncRequest {
 
-    @NotBlank(message = "validation.constraints.username.NotNull.message")
+    /*@NotBlank(message = "validation.constraints.username.NotNull.message")
     @JsonProperty("user_name")
-    private String username;
+    private String username;*/
 
     @JsonProperty("active_status")
     private boolean isActive;

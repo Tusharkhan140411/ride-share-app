@@ -22,10 +22,8 @@ public class DriverRideController extends BaseController {
 
     @GetMapping("/drivers/ride/notification")
     @PreAuthorize("hasRole('DRIVER')")
-    public ResponseEntity<ApiResponse<List<RideNotificationResponse>>> getActiveRides(@RequestBody @Valid RideNotificationRequest request,
-                                                                                      BindingResult bindingResult){
-        super.throwIfHasError(bindingResult);
-        return ResponseEntity.ok(ResponseBuilder.buildOkResponse(driverRideService.getRidesNotification(request.getUsername())));
+    public ResponseEntity<ApiResponse<List<RideNotificationResponse>>> getActiveRides(){
+        return ResponseEntity.ok(ResponseBuilder.buildOkResponse(driverRideService.getRidesNotification()));
     }
 
     @PutMapping("/drivers/ride/acceptance")

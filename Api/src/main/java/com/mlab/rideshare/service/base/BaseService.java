@@ -32,8 +32,8 @@ public abstract class BaseService {
                 );
     }
 
-    protected CurrentUser getCurrentUser() {
-        return (CurrentUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    protected String getCurrentUserName() {
+        return (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
 }

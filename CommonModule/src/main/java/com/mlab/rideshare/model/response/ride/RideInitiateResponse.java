@@ -17,6 +17,6 @@ public class RideInitiateResponse {
     private String status;
     @JsonProperty("initiated_at")
     private String initiatedAt;
-    @JsonProperty("nearest_drivers")
+    @JsonProperty("nearest_notified_drivers")
     private List<DriverDto> drivers;
 }

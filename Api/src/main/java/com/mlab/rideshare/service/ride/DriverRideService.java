@@ -33,8 +33,8 @@ public class DriverRideService extends BaseService {
     private final RideNotificationService rideNotificationService;
     private final Mapper mapper;
 
-    public List<RideNotificationResponse> getRidesNotification(String userName){
-        UserEntity driverEntity = getUserByUserName(userName);
+    public List<RideNotificationResponse> getRidesNotification(){
+        UserEntity driverEntity = getUserByUserName(getCurrentUserName());
 
         List<RideNotificationEntity> rideNotificationEntities = rideNotificationService
                 .getAllActiveNotifications();
@@ -58,7 +58,7 @@ public class DriverRideService extends BaseService {
 
     @Transactional
     public void acceptRide(RideAcceptRequest request){
-        UserEntity driverEntity = getUserByUserName(request.getUsername());
+        UserEntity driverEntity = getUserByUserName(getCurrentUserName());
 
         RideInfoEntity rideInfoEntity = rideInfoEntityService
                 .findByTrackingId(request.getTrackingNo())
@@ -83,7 +83,7 @@ public class DriverRideService extends BaseService {
 
     @Transactional
     public void cancelRide(RideCancelRequest request){
-        UserEntity driverEntity = getUserByUserName(request.getUsername());
+        UserEntity driverEntity = getUserByUserName(getCurrentUserName());
 
         RideInfoEntity rideInfoEntity = rideInfoEntityService
                 .findByTrackingId(request.getTrackingNo())
@@ -100,17 +100,19 @@ public class DriverRideService extends BaseService {
         RideNotificationEntity rideNotificationEntity = rideNotificationService
                 .getNotificationEntityByRideId(rideInfoEntity.getId());
 
+        rideNotificationService.enableNotification(rideNotificationEntity,rideInfoEntity.getDriverId());
+
         mapper.fillUpdatedRideInfoValues(rideInfoEntity, 0, RideStatusEnum.INITIATED.getId());
 
         rideInfoEntityService.save(rideInfoEntity);
 
-        rideNotificationService.enableNotification(rideNotificationEntity,rideInfoEntity.getDriverId());
+
 
     }
 
     @Transactional
     public void startRide(RideUpdateRequest request){
-        UserEntity driverEntity = getUserByUserName(request.getUsername());
+        UserEntity driverEntity = getUserByUserName(getCurrentUserName());
 
         RideInfoEntity rideInfoEntity = rideInfoEntityService
                 .findByTrackingId(request.getTrackingNo())
@@ -134,7 +136,7 @@ public class DriverRideService extends BaseService {
 
     @Transactional
     public void completeRide(RideUpdateRequest request){
-        UserEntity driverEntity = getUserByUserName(request.getUsername());
+        UserEntity driverEntity = getUserByUserName(getCurrentUserName());
 
         RideInfoEntity rideInfoEntity = rideInfoEntityService
                 .findByTrackingId(request.getTrackingNo())

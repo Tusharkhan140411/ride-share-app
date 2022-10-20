@@ -63,7 +63,7 @@ public class CustomerRideService extends BaseService {
     @Transactional
     public RideInitiateResponse initiateRideRequest(RideInitiateRequest request){
 
-        UserEntity userEntity = getUserByUserName(request.getUsername());
+        UserEntity userEntity = getUserByUserName(getCurrentUserName());
 
         List<RideInfoEntity> rideInfoEntities = rideInfoEntityService
                 .findByCustomerIdAndStatus(userEntity.getId(), RideStatusEnum.INITIATED.getId());
@@ -126,7 +126,7 @@ public class CustomerRideService extends BaseService {
 
     @Transactional
     public RideCancelResponse cancelRide(RideCancelRequest request){
-        UserEntity userEntity = getUserByUserName(request.getUsername());
+        UserEntity userEntity = getUserByUserName(getCurrentUserName());
 
         RideInfoEntity rideInfoEntity = rideInfoEntityService
                 .findByCustomerIdAndTrackingId(userEntity.getId(), request.getTrackingNo())
@@ -161,7 +161,7 @@ public class CustomerRideService extends BaseService {
     }
 
     public RideStatusResponse getRideStatus(RideStatusRequest request){
-        UserEntity userEntity = getUserByUserName(request.getUsername());
+        UserEntity userEntity = getUserByUserName(getCurrentUserName());
 
         RideInfoEntity rideInfoEntity = rideInfoEntityService
                 .findByCustomerIdAndTrackingId(userEntity.getId(), request.getTrackingNo())
@@ -192,7 +192,7 @@ public class CustomerRideService extends BaseService {
     }
 
     public void reviewRide(RideReviewRequest request){
-        UserEntity userEntity = getUserByUserName(request.getUsername());
+        UserEntity userEntity = getUserByUserName(getCurrentUserName());
 
         RideInfoEntity rideInfoEntity = rideInfoEntityService
                 .findByCustomerIdAndTrackingId(userEntity.getId(), request.getTrackingNo())

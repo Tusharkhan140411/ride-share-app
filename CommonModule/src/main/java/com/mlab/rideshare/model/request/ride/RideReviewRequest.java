@@ -14,9 +14,9 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RideReviewRequest {
-    @NotBlank(message = "validation.constraints.username.NotNull.message")
+    /*@NotBlank(message = "validation.constraints.username.NotNull.message")
     @JsonProperty("user_name")
-    private String username;
+    private String username;*/
 
     @NotBlank(message = "validation.constraints.tracking.no.NotNull.message")
     @JsonProperty("tracking_no")

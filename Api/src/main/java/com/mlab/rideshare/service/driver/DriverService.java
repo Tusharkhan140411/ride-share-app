@@ -33,8 +33,7 @@ public class DriverService extends BaseService {
                                                             double sourceLatitude,double sourceLongitude,
                                                             int vehicleType){
         return activeDrivers.stream().filter(
-                a -> DistanceCalculatorUtils.distance(sourceLatitude,sourceLongitude,a.getCurrentLatitude(),a.getCurrentLongitude()) !=
-                        properties.getNearestDriverDistanceKm()
+                a -> DistanceCalculatorUtils.distance(sourceLatitude,sourceLongitude,a.getCurrentLatitude(),a.getCurrentLongitude()) != 0
                         && DistanceCalculatorUtils.distance(sourceLatitude,sourceLongitude,a.getCurrentLatitude(),a.getCurrentLongitude()) <=
                         properties.getNearestDriverDistanceKm()
                         && a.getDriverAdditionalInfo().getVehicleInfo().getVehicleType() == vehicleType
@@ -42,7 +41,7 @@ public class DriverService extends BaseService {
     }
 
     public void syncDriverCurrentInfo(DriverCurrentInfoSyncRequest request){
-        UserEntity driverEntity = getUserByUserName(request.getUsername());
+        UserEntity driverEntity = getUserByUserName(getCurrentUserName());
 
         DriverCurrentInfoEntity driverCurrentInfoEntity = driverCurrentInfoEntityService
                 .getDriverByUserId(driverEntity.getId())
