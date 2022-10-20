@@ -1,21 +1,39 @@
 version: '3.9'
 services:
+  ride-share-mysql-service:
+    restart: always
+    image: woahbase/alpine-mysql:latest
+    container_name: mlab_mysql_db_container
     environment:
       MYSQL_USER: root
-        ride-share-mysql-service:
-          restart: always
-          image: woahbase/alpine-mysql:latest
-          container_name: mlab_mysql_db_container
       MYSQL_USER_PWD: root
       MYSQL_USER_DB: ride_share_db
     ports:
       - 0.0.0.0:3306:3306
     networks:
-      - ride-share-network
+      - ride-network
     volumes:
       - db-data:/var/lib/mysql
+
+  ride-share-service:
+    depends_on:
+      - ride-share-mysql-service
+    build:
+      context: .
+    image: ride-share-mlab:latest
+    container_name: ride_share_mlab_container
+    ports:
+      - 0.0.0.0:8080:8080
+    environment:
+      ACTIVE_PROFILE: dev
+      DB_USERNAME: root
+      DB_PASSWORD: root
+      DB_URL: jdbc:mysql://ride-share-mysql-service:3306/ride_share_db
+    networks:
+      - ride-network
+    restart: on-failure
 volumes:
    db-data:
 networks:
-  ride-share-network:
+  ride-network:
     driver: bridge

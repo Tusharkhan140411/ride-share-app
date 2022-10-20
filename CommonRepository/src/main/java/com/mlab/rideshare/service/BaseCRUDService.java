@@ -19,9 +19,9 @@ public abstract class BaseCRUDService<ENTITY, REPO extends JpaRepository<ENTITY,
         return repository.save(entity);
     }
 
-    public List<ENTITY> save(List<ENTITY> entityList) {
+    /*public List<ENTITY> save(List<ENTITY> entityList) {
         return repository.saveAll(entityList);
-    }
+    }*/
 
     @Transactional(readOnly = true)
     public List<ENTITY> findAll() {
