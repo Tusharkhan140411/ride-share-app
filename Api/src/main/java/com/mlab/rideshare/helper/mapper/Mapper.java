@@ -5,6 +5,7 @@ import com.mlab.rideshare.entity.*;
 import com.mlab.rideshare.enums.UserRoleEnum;
 import com.mlab.rideshare.model.auth.CurrentUser;
 import com.mlab.rideshare.model.dto.DriverDto;
+import com.mlab.rideshare.model.dto.EmailDto;
 import com.mlab.rideshare.model.dto.VehicleDto;
 import com.mlab.rideshare.model.request.user.BaseUserRegRequest;
 import com.mlab.rideshare.model.request.driver.DriverCurrentInfoSyncRequest;
@@ -118,6 +119,13 @@ public class Mapper extends BaseService {
                         .destinationLongitude(e.getDestinationLongitude())
                 .build()
         ).collect(Collectors.toList());
+    }
+
+    public EmailDto mapToEmailDto(String email, String body){
+        return EmailDto.builder()
+                .email(email)
+                .body(body)
+                .build();
     }
 
 }

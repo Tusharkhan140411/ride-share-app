@@ -13,6 +13,7 @@ import com.mlab.rideshare.model.request.ride.RideUpdateRequest;
 import com.mlab.rideshare.model.response.ride.RideNotificationResponse;
 import com.mlab.rideshare.service.RideInfoEntityService;
 import com.mlab.rideshare.service.base.BaseService;
+import com.mlab.rideshare.service.email.EmailService;
 import com.mlab.rideshare.service.ride.notification.RideNotificationService;
 import com.mlab.rideshare.util.DateTimeUtils;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,7 @@ public class DriverRideService extends BaseService {
 
     private final RideInfoEntityService rideInfoEntityService;
     private final RideNotificationService rideNotificationService;
+    private final EmailService emailService;
     private final Mapper mapper;
 
     public List<RideNotificationResponse> getRidesNotification(){
@@ -74,6 +76,9 @@ public class DriverRideService extends BaseService {
         RideNotificationEntity rideNotificationEntity = rideNotificationService
                 .getNotificationEntityByRideId(rideInfoEntity.getId());
 
+        if (!isEligible(rideNotificationEntity, driverEntity.getId()))
+            throw new RecordNotFoundException(messageHelper.getLocalMessage("driver.not.eligible.to.start.message"));
+
         mapper.fillUpdatedRideInfoValues(rideInfoEntity, driverEntity.getId(), RideStatusEnum.ACCEPTED.getId());
         rideInfoEntityService.save(rideInfoEntity);
 
@@ -99,6 +104,9 @@ public class DriverRideService extends BaseService {
 
         RideNotificationEntity rideNotificationEntity = rideNotificationService
                 .getNotificationEntityByRideId(rideInfoEntity.getId());
+
+        if (!isEligible(rideNotificationEntity, driverEntity.getId()))
+            throw new RecordNotFoundException(messageHelper.getLocalMessage("driver.not.eligible.to.start.message"));
 
         rideNotificationService.enableNotification(rideNotificationEntity,rideInfoEntity.getDriverId());
 
@@ -127,6 +135,12 @@ public class DriverRideService extends BaseService {
             throw new RecordNotFoundException(messageHelper.getLocalMessage("driver.not.eligible.to.start.message"));
         }
 
+        RideNotificationEntity rideNotificationEntity = rideNotificationService
+                .getNotificationEntityByRideId(rideInfoEntity.getId());
+
+        if (!isEligible(rideNotificationEntity, driverEntity.getId()))
+            throw new RecordNotFoundException(messageHelper.getLocalMessage("driver.not.eligible.to.start.message"));
+
         mapper.fillUpdatedRideInfoValues(rideInfoEntity,RideStatusEnum.IN_PROGRESS.getId(),
                 DateTimeUtils.formatDateToDBFormat(new Date()));
 
@@ -151,11 +165,24 @@ public class DriverRideService extends BaseService {
             throw new RecordNotFoundException(messageHelper.getLocalMessage("driver.not.eligible.to.complete.message"));
         }
 
+        RideNotificationEntity rideNotificationEntity = rideNotificationService
+                .getNotificationEntityByRideId(rideInfoEntity.getId());
+
+        if (!isEligible(rideNotificationEntity, driverEntity.getId()))
+            throw new RecordNotFoundException(messageHelper.getLocalMessage("driver.not.eligible.to.start.message"));
+
         mapper.fillUpdatedRideInfoValues(rideInfoEntity,RideStatusEnum.COMPLETED.getId(),
                 DateTimeUtils.formatDateToDBFormat(new Date()), PaymentStatusEnum.COMPLETE.getId());
 
         rideInfoEntityService.save(rideInfoEntity);
 
-        //send mail to customer
+        emailService.sendEmail(mapper
+                .mapToEmailDto("test@gmail.com","Payment completed succefully"));
+    }
+
+    private boolean isEligible(RideNotificationEntity rideNotificationEntity, long driverId){
+        return rideNotificationEntity
+                .getNearestDriverList()
+                .contains(String.valueOf(driverId));
     }
 }
