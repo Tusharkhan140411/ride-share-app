@@ -18,5 +18,5 @@ public class ApplicationProperties {
     private String tokenValidationRegex;
     private boolean seederEnabled;
     private String apiVersion;
-    private int maxIssueBook;
+    private double nearestDriverDistanceKm;
 }

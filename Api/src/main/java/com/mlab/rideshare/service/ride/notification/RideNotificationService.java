@@ -56,8 +56,12 @@ public class RideNotificationService extends BaseService {
         rideNotificationEntityService.save(entity);
     }
 
-    public void enableNotification(RideNotificationEntity entity){
+    public void enableNotification(RideNotificationEntity entity,long driverId){
+        String nearestDrivers = entity.getNearestDriverList()
+                .replaceAll(String.valueOf(driverId),"");
+
         entity.setActiveStatus(Boolean.TRUE);
+        entity.setNearestDriverList(nearestDrivers);
 
         rideNotificationEntityService.save(entity);
     }

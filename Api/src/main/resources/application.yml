@@ -32,11 +32,11 @@ spring:
     baseline-on-migrate: true
 
 application:
-  token-expiry-minute: 30
+  token-expiry-minute: 20
   token-prefix: Bearer
   jwt-secret: Tu@Shar573
   auth-header-name: Authorization
   token-validation-regex: ^Bearer\s[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$
   seeder-enabled: true
   api-version: 0.0.1
-  max-issue-book: 5
+  nearest-driver-distance-km: 3

@@ -11,4 +11,5 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
     Optional<UserEntity> findDistinctByUsername(String username);
+    List<UserEntity> findByRoleName(String name);
 }

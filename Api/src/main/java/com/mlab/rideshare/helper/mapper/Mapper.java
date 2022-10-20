@@ -57,8 +57,8 @@ public class Mapper extends BaseService {
        return userEntity;
     }
 
-    public DriverAdditionalInfoEntity mapToDriverAdditionalInfoEntity(DriverRegistrationRequest driverRegistrationRequest, long userId,
-                                                                      VehicleInfoEntity vehicleInfoEntity, DriverCurrentInfoEntity driverCurrentInfoEntity){
+    public DriverAdditionalInfoEntity mapToDriverAdditionalInfoEntity(long userId, VehicleInfoEntity vehicleInfoEntity,
+                                                                      DriverCurrentInfoEntity driverCurrentInfoEntity){
         DriverAdditionalInfoEntity driverAdditionalInfoEntity = DriverAdditionalInfoEntity.builder()
                 .userId(userId)
                 .driverCurrentInfo(driverCurrentInfoEntity)
